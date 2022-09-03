@@ -6,24 +6,132 @@ date: "2022-09-03"
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
 ```
 
-## R Markdown
+Title 
+• Project title, names and IDs of students in your project group, date of submission 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Taine Murphy - 300472954    
+Van   
+Max   
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Background and Data [1-3 pages] 
+• State which dataset(s) your group worked on, and their source 
 
-```{r cars}
-summary(cars)
+• Explain briefly why the dataset is of interest, or what questions it could be used to answer; assume that the reader has never heard of your dataset 
+
+• State the types of data in the dataset(s) and the structure of the dataset(s). Are the data numerical, categorical, or both? Time series? Coordinates? Diagnostic categories? This does NOT need to be an exhaustive list of every variable, just a few comments on the overall types. 
+
+• State how complete the dataset(s) are (i.e. how many missing, any structure to the missing data, whether there are errors in the data)
+
+• If you used more than one dataset, state what steps you had to take to integrate the datasets 
+
+Ethics, Privacy and Security [1-2 pages] 
+
+• Brief discussion of any ethical considerations that apply to your project 
+
+• Brief discussion of any privacy concerns that might arise connected to your project 
+
+• Brief discussion of what steps you could take to keep your project data and results secure (you do NOT need to carry this out, you just need to talk about it in the report) 
+
+Exploratory Data Analysis [3-6 pages] 
+For this section, do NOT try to summarize everything you can find in the dataset(s). Select a subset, highlighting features that you thought were interesting in the data. The plots do not have to be complicated; simple bar charts and scatter plots are fine. 
+
+• Several summary tables and/or plots, each describing one, two or three variables in the data that you thought were interesting 
+• Explain the definitions of the variables in each table/plot 
+• Comment on the main features of each plot 
+• Include suitable labels and keys for each plot 
+• Make sure all plots would be readable if printed in black & white, and adjust the point sizes and/or line thicknesses to improve readability 
+• Lay out all tables so that they are clearly readable and clearly labelled, and do not use excessive significant figures 
+
+
+# Open cluster subsets: m67 and Pleiades
+
+```{r}
+pleiades <- read.csv("Pleiades_4.csv")
+pleiades$distparsecs <- 1/(pleiades$parallax/1000)
+pleiades$abM <- pleiades$phot_g_mean_mag - (2.5 * log((pleiades$distparsecs/10)^2,10))
+
+
+m67 <- read.csv("m67.csv")
+m67$distparsecs <- 1/(m67$parallax/1000)
+m67$abM <- m67$phot_g_mean_mag - (2.5 * log((m67$distparsecs/10)^2,10))
+
+
+
+
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+
+
+##Display pmra/pmdec plot
+
+```{r}
+ggplot(pleiades, aes(x=pmra, y=pmdec )) +
+  geom_point()
+
+ggplot(m67, aes(x=pmra, y=pmdec )) +
+  geom_point()
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## TODO comparison of some means of variables
+
+```{r}
+
+```
+
+## HR diagram - use ages of cluster with diagram showing the comparison
+```{r}
+ggplot(pleiades, aes(x=bp_rp, y=abM)) +
+  geom_point(aes(color = teff_gspphot))+ scale_y_reverse()
+
+ggplot(m67, aes(x=bp_rp, y=abM)) +
+  geom_point(aes(color = teff_gspphot))+ scale_y_reverse()
+
+```
+
+IF MORE NEEDED:
+
+
+- Matariki constellation subset
+
+Different to the pleiades subset since some of the stars are missing proper motions/ parallax
+
+
+- Stars vs Quasars vs Galaxies 
+
+
+
+
+
+Individual Contributions [1 page] 
+
+• State what contribution each member of the group made to the data preparation, the analysis and the report 
+
+Overall Report
+These marks will be awarded for overall presentation, clarity and quality of the report. In particular, marks will be awarded for 
+
+• A clear logical layout 
+
+• Keeping to the page limits for each section, and using sensible font size
+
+• Key facts being easily located
+
+• Readability of tables and plots DATA 301 T2 2022 5 
+
+• Clarity of expression [Note: for non-native speakers of English: your English does not need to be perfect, it is the logic and correctness of your presentation that is most important. Nevertheless you are advised to get someone to proof-read your proposal.] 
+
+• Clear explanation of how your choice of exploratory plots and tables is relevant to your project, and how the ethical considerations apply to your project (i.e. not just a set of generalities) 
+
+• Make sure each time you use/refer to someone else’s work you cite the source in the text, and include the reference in the list at the end. It does not need to be a long list; you may only need one or two references. 
+
+• Referencing should be correctly done: a complete list of references must be included. You can use any referencing style you wish; APA is fine if that’s what you like. 
+
+Total: 35 marks 
+
+You will be expected to include a revised version of the Background, Ethics and EDA sections in the final project report; you do not have to rewrite those sections from scratch. You will be expected to consider any feedback you have received for this first report when revising it for the final report, and this will be taken into account when the final report is marked.
