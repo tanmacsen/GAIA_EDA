@@ -7,6 +7,8 @@ date: "2022-09-03"
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
+library(dplyr)
+
 ```
 
 Title 
@@ -76,12 +78,26 @@ ggplot(pleiades, aes(x=pmra, y=pmdec )) +
 ggplot(m67, aes(x=pmra, y=pmdec )) +
   geom_point()
 
+pleiades$class <- "Pleiades"
+m67$class <-"m67"
+merge <- rbind(pleiades, m67)
+
+ggplot(merge, aes(x=pmra, y=pmdec )) +
+  geom_point(aes(color =class ))
+
+#ggplot(merge, aes(x=ra, y=dec )) +
+  geom_point(aes(color =class ))
+
+#ggplot(pleiades, aes(x = parallax)) + geom_histogram(position = "dodge") 
+
 ```
 
 
 ## TODO comparison of some means of variables
 
 ```{r}
+as.data.frame(apply(pleiades[][5:10],2,summary)) 
+
 
 ```
 
@@ -92,6 +108,9 @@ ggplot(pleiades, aes(x=bp_rp, y=abM)) +
 
 ggplot(m67, aes(x=bp_rp, y=abM)) +
   geom_point(aes(color = teff_gspphot))+ scale_y_reverse()
+
+ggplot(merge, aes(x=bp_rp, y=abM)) +
+  geom_point(aes(color = class))+ scale_y_reverse()
 
 ```
 
