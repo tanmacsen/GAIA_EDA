@@ -9,6 +9,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(dplyr)
 
+library(patchwork)
+
 ```
 
 Title 
@@ -21,13 +23,39 @@ Max
 Background and Data [1-3 pages] 
 • State which dataset(s) your group worked on, and their source 
 
+The dataset we used was the GAIA archive, 
+
 • Explain briefly why the dataset is of interest, or what questions it could be used to answer; assume that the reader has never heard of your dataset 
 
+
+
 • State the types of data in the dataset(s) and the structure of the dataset(s). Are the data numerical, categorical, or both? Time series? Coordinates? Diagnostic categories? This does NOT need to be an exhaustive list of every variable, just a few comments on the overall types. 
+
+There are a total of 153 columns within the GAIA dataset "gaiadr3.gaia_source".
+
+The range of data types include:
+
+- char 
+- short
+- float
+- boolean
+- double
+
+Which cover a range of information about the dataset including, but not limited to:
+
+- Position
+- Movement (direction, speed)
+- Distance 
+- Photometry (colour, brightness)
+- Correlation values
+- Classification probabilities (Quasar vs Galaxy vs Star)
+- Measuring metrics (measurement error)
 
 • State how complete the dataset(s) are (i.e. how many missing, any structure to the missing data, whether there are errors in the data)
 
 • If you used more than one dataset, state what steps you had to take to integrate the datasets 
+
+We ran two queries to gather two subsets of the dataset, each representing two open clusters (Pleiades and m67). This was gathered using the GAIA archive which filtered based on location, proper motion, present variables and error rates.
 
 Ethics, Privacy and Security [1-2 pages] 
 
@@ -103,14 +131,24 @@ as.data.frame(apply(pleiades[][5:10],2,summary))
 
 ## HR diagram - use ages of cluster with diagram showing the comparison
 ```{r}
-ggplot(pleiades, aes(x=bp_rp, y=abM)) +
-  geom_point(aes(color = teff_gspphot))+ scale_y_reverse()
 
-ggplot(m67, aes(x=bp_rp, y=abM)) +
-  geom_point(aes(color = teff_gspphot))+ scale_y_reverse()
 
-ggplot(merge, aes(x=bp_rp, y=abM)) +
-  geom_point(aes(color = class))+ scale_y_reverse()
+a <- ggplot(pleiades, aes(x=bp_rp, y=abM)) +
+  geom_point(size= 0.5)+ scale_y_reverse()+ xlim(-1,4) + ylim(17,-5) + coord_fixed(0.25) + ggtitle("Pleiades") +
+  xlab("bp_rp") + ylab("Absolute Magnitude")
+
+b <- ggplot(m67, aes(x=bp_rp, y=abM)) +
+  geom_point(size= 0.5)+ scale_y_reverse() + xlim(-1,4) + ylim(17,-5) + coord_fixed(0.25) + ggtitle("m67") +
+  xlab("bp_rp") + ylab("Absolute Magnitude")
+
+
+t <- theme(plot.title = element_text(face="bold"))
+a + b + plot_annotation(title = "Appendix X - Hertzsprung–Russell diagram between 2 open clusters", theme = t) 
+
+
+
+#ggplot(merge, aes(x=bp_rp, y=abM)) +
+#  geom_point(aes(color = class))+ scale_y_reverse()
 
 ```
 
