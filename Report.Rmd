@@ -8,7 +8,6 @@ date: "2022-09-03"
 knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(dplyr)
-
 library(patchwork)
 
 ```
@@ -79,12 +78,12 @@ For this section, do NOT try to summarize everything you can find in the dataset
 # Open cluster subsets: m67 and Pleiades
 
 ```{r}
-pleiades <- read.csv("Pleiades_4.csv")
+pleiades <- read.csv("pleiades-result.csv")
 pleiades$distparsecs <- 1/(pleiades$parallax/1000)
 pleiades$abM <- pleiades$phot_g_mean_mag - (2.5 * log((pleiades$distparsecs/10)^2,10))
 
 
-m67 <- read.csv("m67.csv")
+m67 <- read.csv("m67-result.csv")
 m67$distparsecs <- 1/(m67$parallax/1000)
 m67$abM <- m67$phot_g_mean_mag - (2.5 * log((m67$distparsecs/10)^2,10))
 
@@ -110,13 +109,10 @@ pleiades$class <- "Pleiades"
 m67$class <-"m67"
 merge <- rbind(pleiades, m67)
 
-ggplot(merge, aes(x=pmra, y=pmdec )) +
-  geom_point(aes(color =class ))
+ggplot(merge, aes(x=pmra, y=pmdec )) + geom_point(aes(color =class ))
+ggplot(merge, aes(x=ra, y=dec )) + geom_point(aes(color =class ))
 
-#ggplot(merge, aes(x=ra, y=dec )) +
-  geom_point(aes(color =class ))
-
-#ggplot(pleiades, aes(x = parallax)) + geom_histogram(position = "dodge") 
+ggplot(pleiades, aes(x = parallax)) + geom_histogram(position = "dodge") 
 
 ```
 
@@ -124,7 +120,7 @@ ggplot(merge, aes(x=pmra, y=pmdec )) +
 ## TODO comparison of some means of variables
 
 ```{r}
-as.data.frame(apply(pleiades[][5:10],2,summary)) 
+summary(pleiades)
 
 
 ```
